@@ -4,7 +4,7 @@ pipeline {
         stage('SCM') {
             steps {
                 sh 'git clone https://github.com/yaswanth650/Damn_Vulnerable_C_Program.git ||true'
-                sh 'git clone https://github.com/danmar/cppcheck.git || true'
+                sh 'git clone https://github.com/yaswanth650/cppcheck.git || true'
             }
         }
      stage('CPPCHECK') {
@@ -18,8 +18,8 @@ pipeline {
     stage('DUMP') {
             steps {
                 sh 'cppcheck --enable=all --dump Damn_Vulnerable_C_Program'
-                sh 'python3 cppcheck/addons/misra.py Damn_Vulnerable_C_Program/*.dump 2>report.xml || true'
-                sh 'python3  Damn_Vulnerable_C_Program/cert.py Damn_Vulnerable_C_Program/*.dump 2>report2.xml || true'
+                sh 'python3 cppcheck/addons/misra.py Damn_Vulnerable_C_Program/*.dump 2>report.txt || true'
+                sh 'python3  Damn_Vulnerable_C_Program/cert.py Damn_Vulnerable_C_Program/*.dump 2>report2.txt || true'
                   }
             }
       }
@@ -27,8 +27,8 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'cppcheck_report.txt', allowEmptyArchive: true
             archiveArtifacts artifacts: 'cppcheck_report.xml', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'report.xml', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'report2.xml', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'report.txt', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'report2.txt', allowEmptyArchive: true
             recordIssues tools: [cppCheck(pattern: 'cppcheck_report.xml')]
             }
          }
